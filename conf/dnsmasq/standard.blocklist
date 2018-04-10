@@ -1,0 +1,51 @@
+# This file contains domains for which no queries should ever
+# reach the internet.
+
+# RFC6761 reserved domains
+.test
+.localhost
+.invalid
+
+# Local reserved domains
+.example
+.home
+.local
+# should perhaps also contain .box but that is now an actual TLD
+
+# Local IPv6 range reverses (RFC6303)
+.d.f.ip6.arpa
+.8.e.f.ip6.arpa
+.9.e.f.ip6.arpa
+.a.e.f.ip6.arpa
+.b.e.f.ip6.arpa
+# Reserved IPv6 range reverses (RFC6303)
+.8.B.D.0.1.0.0.2.IP6.ARPA
+
+# Local IPv4 range reverses (RFC6303)
+.10.in-addr.arpa
+.16.172.in-addr.arpa
+.17.172.in-addr.arpa
+.18.172.in-addr.arpa
+.19.172.in-addr.arpa
+.20.172.in-addr.arpa
+.21.172.in-addr.arpa
+.22.172.in-addr.arpa
+.23.172.in-addr.arpa
+.24.172.in-addr.arpa
+.25.172.in-addr.arpa
+.26.172.in-addr.arpa
+.27.172.in-addr.arpa
+.28.172.in-addr.arpa
+.29.172.in-addr.arpa
+.30.172.in-addr.arpa
+.31.172.in-addr.arpa
+.168.192.in-addr.arpa
+# Reserved IPv4 range reverses
+.0.IN-ADDR.ARPA
+.127.IN-ADDR.ARPA
+.254.169.IN-ADDR.ARPA
+.2.0.192.IN-ADDR.ARPA
+.100.51.198.IN-ADDR.ARPA
+.113.0.203.IN-ADDR.ARPA
+.255.255.255.255.IN-ADDR.ARPA
+

@@ -1,0 +1,9 @@
+bind-dynamic
+pid-file=/tmp/dnsmasq.pid
+local-ttl=10
+neg-ttl=300
+rebind-localhost-ok
+filterwin2k
+no-negcache
+servers-file=/tmp/servers.conf
+proxy-dnssec
