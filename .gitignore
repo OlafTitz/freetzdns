@@ -1,5 +1,5 @@
 build/
-root/
-install.tar.gz
+dns/
+freetz-dns-bin.tar.gz
 imported/
 *~
