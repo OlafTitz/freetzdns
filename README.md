@@ -42,8 +42,12 @@ just more convenient.)
 
 ### Prerequisites
 
-Freetz must be already completely built. Freetz configuration needs
-the following packages selected: __dnsmasq__, __openssl__, __expat__.
+Freetz must be already completely built.
+Freetz configuration needs the following packages selected:
+* __dnsmasq__ (Packages - Packages, enable DNSSEC)
+* __curl__ (Packages - Packages)
+* __openssl__ (Shared libraries - Crypto & SSL)
+* __libexpat__ (Shared libraries - XML & XSLT)
 It is recommended to run this firmware version and configure dnsmasq
 to work with the ISP's resolver before proceeding.
 
@@ -66,8 +70,11 @@ root, with the following subdirectories:
 The configuration files in `.../etc` actually are Freetz configuration
 files and therefore must be copied over to (the respective
 subdirectory of) `/var/tmp/flash`. After editing them to your needs,
-manually copy both subdirectories to `/var/tmp/flash`.
+run the `install.sh` script in the unbound subdirectory, which copies
+the configuration and creates the necessary device nodes (unbound runs
+under chroot).
 
+Manually copy the files in the dnsmasq subdirectory.
 Pay special attention to `dnsmasq.extra`, which you perhaps already
 have edited with the Freetz web interface. After copying the files, run
 `modsave all`.
@@ -78,6 +85,10 @@ Make sure that the provided `bin/unbound.sh` script gets called from
 `rc.custom` to start the unbound and microdns processes. Run the
 `bin/update-blocklists.sh` script once a week (or whatever you
 consider useful) from crontab.
+
+Configure dnsmasq from the Freetz web interface to **not** use
+the ISP's upstream nameserver, and use `127.0.0.1#53001` as
+"additional" (really only) upstream nameserver.
 
 ### Domain blocklisting
 
@@ -102,3 +113,78 @@ I deliberately chose to maintain the DNSSEC trust anchors manually.
 These are therefore found in the `unbound.conf` file as "trust-anchor"
 parameters with a DS key. No trust anchor file of any type is used.
 
+Local, blocked and invalid domains are redirected by dnsmasq and those
+queries never arrive at unbound, so unbound configuration can be kept
+at a minimum and never needs to be changed (except for purely operational
+issues).
+
+## Authors and licenses
+
+### For unbound
+
+Copyright (c) 2007, NLnet Labs. All rights reserved.
+
+This software is open source.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+
+Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
+and/or other materials provided with the distribution.
+
+Neither the name of the NLNET LABS nor the names of its contributors may
+be used to endorse or promote products derived from this software without
+specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+### For microdns
+
+Copyright (c) 2009-2010 Sam Trenholme
+
+TERMS
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+This software is provided 'as is' with no guarantees of correctness or
+fitness for purpose.
+
+### For everything else in this package
+
+Copyright (c) 2018 Olaf Titz
+
+TERMS
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+
+This software is provided 'as is' with no guarantees of correctness or
+fitness for purpose.
