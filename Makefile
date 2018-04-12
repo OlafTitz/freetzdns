@@ -41,7 +41,7 @@ build/unbound: builddirs
 	  --with-run-dir=/tmp \
 	  --with-rootkey-file=/var/tmp/flash/unbound/root.key \
 	  --with-ssl="$(OPENSSL)" \
-	  --with-libevent --without-pthreads \
+	  --with-libevent=no --without-pthreads \
 	  --disable-rpath --enable-allsymbols \
 	  --with-username=nobody \
 	&& make)
