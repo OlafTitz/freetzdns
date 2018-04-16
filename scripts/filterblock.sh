@@ -1,7 +1,6 @@
 #!/bin/sh
-# Do not run this manually. It should be called in the right working directory.
 
-# This does the following to each blocklist file:
+# This does the following to each blocklist file given as arguments:
 # - Canonicalize line endings
 # - Remove the HTTP headers getblock.sh has left for debugging
 # - Remove blank and comment lines
@@ -9,14 +8,15 @@
 # - Strip IP addresses and aliases from /etc/hosts formatted files
 # - Remove lines containing raw IP addresses
 # - Sort and remove duplicates
-# - Prepend a dot to each line if not already there
-# The result is on standard output, a list of to-be-blocked domains.
+# - Convert the domain names into appropriate "server=" lines
+# The result is on standard output.
 
-(for i in *.blocklist ; do \
+set -e
+(for i in "$@" ; do \
 	cat "$i" | tr -d '\r' | sed -e '1,/^$/d' -e '/^#/d' -e '/^$/d' ;
 	done
 ) | \
 awk 'NF==1 {print} NF>1 {print $2}' | \
-egrep -v '^[0-9.]+$' | fgrep '.' | \
+egrep -v '^[0-9.]+$' | \
 sort -u | \
-sed -e 's/^[^\.]/./'
+sed -e 's:^:server=/:' -e 's:$:/127.0.0.1#53002:'
