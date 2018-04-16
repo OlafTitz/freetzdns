@@ -19,32 +19,34 @@ The building blocks are
 ## Overview
 
 The resolver which is seen by users on port 53 is __dnsmasq__. This
-integrates with DHCP to give dynamically registered hosts local names.
-Everything else is forwarded to some other server, specified by
-dnsmasq configuration:
+integrates with DHCP to give dynamically registered hosts local names
+and manages locally defined names.
+Everything else is forwarded to one of two other locally running server
+processes, specified by dnsmasq configuration:
 
 * Usually, the __unbound__ process is queried (on localhost port 53001).
   This does all the recursive resolving, caching and DNSSEC validation
   for regular domains on the internet. No specialized configuration here.
 * Blacklisted domains are directed to the __microdns__ process, on localhost
   port 53002, which answers "authoritative NXDOMAIN, no additional data"
-  to any query sent to it. This also applies to those domains which
-  have no (globally valid) data by definition, like 10.IN-ADDR.ARPA.
+  to any query sent to it, making the domain look non-existent.
+  This also applies to those domains which have no (globally valid) data
+  by definition, like 10.IN-ADDR.ARPA.
 
 ## Installation
 
-This is designed for bigger Fritzboxes (unbound needs a nontrivial
-amount of memory) which also have some free space in the `/var/media/ftp`
-partition. The binaries are installed there. (The Freetz addon build
-could also be used, but is more complicated, has more pitfalls
-and requires a firmware update if anything gets changed, so this is
-just more convenient.)
+This is designed for bigger Fritzboxes (dnsmasq and unbound need a
+nontrivial amount of memory) which also have some free space in the
+`/var/media/ftp` partition. The binaries are installed there. (The
+Freetz addon build could also be used, but is more complicated, has
+more pitfalls and requires a firmware update if anything gets changed,
+so this is just more convenient.)
 
 ### Prerequisites
 
 Freetz must be already completely built.
 Freetz configuration needs the following packages selected:
-* __dnsmasq__ (Packages - Packages, enable DNSSEC)
+* __dnsmasq__ (in the menu: Packages - Packages, enable DNSSEC)
 * __curl__ (Packages - Packages)
 * __openssl__ (Shared libraries - Crypto & SSL)
 * __libexpat__ (Shared libraries - XML & XSLT)
@@ -76,12 +78,12 @@ under chroot).
 
 Manually copy the files in the dnsmasq subdirectory.
 Pay special attention to `dnsmasq.extra`, which you perhaps already
-have edited with the Freetz web interface. After copying the files, run
-`modsave all`.
+have edited with the Freetz web interface. After installing the 
+configuration files or any change therein, run `modsave all`.
 
 ## Running
 
-Make sure that the provided `bin/unbound.sh` script gets called from
+Make sure that the provided `bin/start-unbound.sh` script gets called from
 `rc.custom` to start the unbound and microdns processes. Run the
 `bin/update-blocklists.sh` script once a week (or whatever you
 consider useful) from crontab.
@@ -92,7 +94,7 @@ the ISP's upstream nameserver, and use `127.0.0.1#53001` as
 
 ### Domain blocklisting
 
-This resolver can use the domain blocklists from the
+This resolver can use the domain blocklists found in the
 [pi-hole](https://pi-hole.net) project or other sources. As delivered,
 no domain blocklisting is used. Edit the `bin/getblock.sh` script to
 suit your needs.
@@ -112,11 +114,17 @@ DNS is never used at all.)
 I deliberately chose to maintain the DNSSEC trust anchors manually.
 These are therefore found in the `unbound.conf` file as "trust-anchor"
 parameters with a DS key. No trust anchor file of any type is used.
+You can change this if you desire and know how to operate unbound.
 
 Local, blocked and invalid domains are redirected by dnsmasq and those
 queries never arrive at unbound, so unbound configuration can be kept
 at a minimum and never needs to be changed (except for purely operational
 issues).
+
+The start script sets up microdns to return NXDOMAIN for the affected
+queries. You can change this to return a special IP address (usually
+in the 127.* range), this address is given in the microdns command
+line in the start-unbound.sh script.
 
 ## Authors and licenses
 
