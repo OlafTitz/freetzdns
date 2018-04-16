@@ -52,6 +52,6 @@ builddirs: prereq
 	test -d dns || mkdir dns
 
 allclean: prereq
-	rm -rf bin dns $(PACKAGE)
+	rm -rf build bin dns $(PACKAGE)
 
 .PHONY: prereq builddirs package allclean
