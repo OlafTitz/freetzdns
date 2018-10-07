@@ -6,7 +6,7 @@ g() {
     curl -q -s -S -f -k -i -L -o "${1}.blocklist" "$2"
 }
 rm -f *.blocklist
-cp /var/tmp/flash/dnsmasq/standard.blocklist .
+cp /var/tmp/flash/dnsmasq/*list .
 
 # These are blacklist URLs obtained from
 # https://github.com/pi-hole/pi-hole/blob/master/adlists.default

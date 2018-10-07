@@ -50,6 +50,7 @@ Freetz configuration needs the following packages selected:
 * __curl__ (Packages - Packages)
 * __openssl__ (Shared libraries - Crypto & SSL)
 * __libexpat__ (Shared libraries - XML & XSLT)
+
 It is recommended to run this firmware version and configure dnsmasq
 to work with the ISP's resolver before proceeding.
 
