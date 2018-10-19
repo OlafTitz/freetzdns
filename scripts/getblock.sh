@@ -4,6 +4,7 @@
 set -e
 g() {
     curl -q -s -S -f -k -i -L -o "${1}.blocklist" "$2"
+    wc -l "${1}.blocklist" >&2
 }
 rm -f *.blocklist
 cp /var/tmp/flash/dnsmasq/*list .
