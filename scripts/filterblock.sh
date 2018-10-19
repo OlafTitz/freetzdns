@@ -1,6 +1,8 @@
 #!/bin/sh
 
-# This does the following to each blocklist file given as arguments:
+# This does the following:
+# - Read the whitelist, removing comment and blank lines, add a dummy
+# For each blocklist file given as arguments:
 # - Canonicalize line endings
 # - Remove the HTTP headers getblock.sh has left for debugging
 # - Remove blank and comment lines
@@ -13,7 +15,7 @@
 # The result is on standard output.
 
 set -e
-w=`cat noblock.whitelist | sed -e '/^#/d' -e '/^$/d'`
+w=`echo .... | cat - noblock.whitelist | sed -e '/^#/d' -e '/^$/d'`
 (for i in "$@" ; do \
 	cat "$i" | tr -d '\r' | sed -e '1,/^$/d' -e '/^#/d' -e '/^$/d' ;
 	done
