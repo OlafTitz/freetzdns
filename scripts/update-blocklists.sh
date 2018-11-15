@@ -11,4 +11,4 @@ set -e
 	wc -l /tmp/servers.conf >&2
 	echo "Reloading dnsmasq" >&2
 	kill -HUP `cat /tmp/dnsmasq.pid`
-) 2>&1 | logger -i -t update-blocklists -p user.info
+) 2>&1 | logger -t update-blocklists -p user.info
